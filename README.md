@@ -50,9 +50,9 @@ You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B
 **Step 2: Verify File Paths**
 Ensure the paths to the dataset, RAG corpus, and LoRA weights match your directory structure. In Colab, if you uploaded the folders to `/content/sample_data`, it should look like this:
 
-    adapter_path = "/content/sample_data/lora_weights" 
-    CORPUS_PATH = "/content/sample_data/data/medical_corpus.jsonl" 
-    EVAL_DATASET_PATH = "/content/sample_data/data/uniformed_dementia_finetuning_dataset.jsonl"
+    adapter_path = "/content/drive/mydrive/6895-midterm-project/lora_weights" 
+    CORPUS_PATH = "/content/drive/mydrive/6895-midterm-project/data/medical_corpus.jsonl" 
+    EVAL_DATASET_PATH = "/content/drive/mydrive/6895-midterm-project/data/uniformed_dementia_finetuning_dataset.jsonl"
 
 **Step 3: Execute the Pipeline**
 Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
