@@ -15,7 +15,7 @@ Our repository is organized as follows to ensure reproducibility:
     ├── data/
     │   ├── medical_corpus.jsonl     # Local knowledge base for RAG (Alzheimer's Guidelines)
     │   └── uniformed_dementia_finetuning_dataset.jsonl # Distilled dataset for evaluation
-    ├── lora_weights/                # Fine-tuned QLoRA model adapter files
+    ├── lora_weights/                # Fine-tuned QLoRA model adapter files (Included)
     ├── assets/                      # UI screenshots and evaluation reports
     ├── requirements.txt             # Python dependencies
     └── README.md
@@ -42,24 +42,21 @@ You can install all dependencies via pip using the provided requirements file:
 
 ## 🚀 How to Run the System
 
-**Step 1: Download LoRA Weights**
-Due to GitHub file size limits, the fine-tuned model weights are hosted on Google Drive. Please download all files from **[OUR GOOGLE DRIVE LINK](https://drive.google.com/drive/folders/17q08s3h5z8DYqLYIr3wHxJLcVmoClda8?usp=sharing)** and place them in the `lora_weights` directory in this repository.
-
-**Step 2: Set up Hugging Face Token**
+**Step 1: Set up Hugging Face Token**
 You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb`, locate the environment variable configuration in the first cell, and insert your token:
 
     os.environ["HF_TOKEN"] = "your_hf_token_here"
 
-**Step 3: Verify File Paths**
+**Step 2: Verify File Paths**
 Ensure the paths to the dataset, RAG corpus, and LoRA weights match your directory structure. In Colab, if you uploaded the folders to `/content/sample_data`, it should look like this:
 
     adapter_path = "/content/sample_data/lora_weights" 
     CORPUS_PATH = "/content/sample_data/data/medical_corpus.jsonl" 
     EVAL_DATASET_PATH = "/content/sample_data/data/uniformed_dementia_finetuning_dataset.jsonl"
 
-**Step 4: Execute the Pipeline**
+**Step 3: Execute the Pipeline**
 Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
-1. Initialize the Base Model and load our QLoRA weights.
+1. Initialize the Base Model and load our local QLoRA weights.
 2. Build the FAISS Vector Database for RAG.
 3. Run the **Large-Scale Academic Evaluation Suite** (evaluating 50 cases for safety and empathy).
 4. Run the **Deep Multiturn Memory Stress Test** with terminal UI rendering.
