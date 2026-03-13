@@ -8,7 +8,7 @@ MindKeeper is an AI system designed to solve the critical alignment conflict in 
 ---
 
 ## 📂 Repository Structure
-Our repository is organized as follows to ensure reproducibility:
+Our repository is organized as follows to ensure reproducibility and out-of-the-box local execution:
 
     ├── src/ 
     │   └── MindKeeper_main.ipynb    # Main runnable notebook (UI, RAG, Eval, Memory Test)
@@ -24,7 +24,7 @@ Our repository is organized as follows to ensure reproducibility:
 
 ## 🛠️ How to Install Dependencies
 
-To run MindKeeper, a GPU-enabled environment is highly recommended (e.g., Google Colab with L4/T4 GPU).
+To run MindKeeper, a GPU-enabled environment is highly recommended (e.g., a local machine with CUDA, or Google Colab with L4/T4 GPU).
 
 **Step 1: Clone the repository**
 
@@ -36,23 +36,25 @@ You can install all dependencies via pip using the provided requirements file:
 
     pip install -r requirements.txt
 
-*(Note: If you are running this in Google Colab, the first cell of our `MindKeeper_main.ipynb` already includes all the necessary pip install commands).*
+*(Note: If you are running this in Google Colab or a fresh Jupyter environment, the first cell of our `MindKeeper_main.ipynb` already includes all the necessary pip install commands).*
 
 ---
 
 ## 🚀 How to Run the System
+
+Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box** locally without requiring Google Drive mounting.
 
 **Step 1: Set up Hugging Face Token**
 You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb`, locate the environment variable configuration in the first cell, and insert your token:
 
     os.environ["HF_TOKEN"] = "your_hf_token_here"
 
-**Step 2: Verify File Paths**
-Ensure the paths to the dataset, RAG corpus, and LoRA weights match your directory structure. In Colab, if you uploaded the folders to `/content/sample_data`, it should look like this:
+**Step 2: Verify Relative File Paths**
+The paths to the dataset, RAG corpus, and LoRA weights are already configured using relative paths. As long as you run the notebook from within the `src/` directory, no changes are needed:
 
-    adapter_path = "/content/drive/mydrive/6895-midterm-project/lora_weights" 
-    CORPUS_PATH = "/content/drive/mydrive/6895-midterm-project/data/medical_corpus.jsonl" 
-    EVAL_DATASET_PATH = "/content/drive/mydrive/6895-midterm-project/data/uniformed_dementia_finetuning_dataset.jsonl"
+    adapter_path = "../lora_weights" 
+    CORPUS_PATH = "../data/medical_corpus.jsonl" 
+    EVAL_DATASET_PATH = "../data/uniformed_dementia_finetuning_dataset.jsonl"
 
 **Step 3: Execute the Pipeline**
 Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
