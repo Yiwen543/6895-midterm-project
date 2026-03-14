@@ -100,7 +100,7 @@ When the system runs, it dynamically routes the user input and generates a split
 ### Quantitative Evaluation
 The system also outputs an automated academic evaluation report. In our stress tests, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a high **BERTScore F1** for empathy semantic alignment.
 
-![Evaluation Report Screenshot](./assets/eval_report.jpg)
+![Evaluation Report Screenshot](./assets/screen.png)
 
 ---
 
