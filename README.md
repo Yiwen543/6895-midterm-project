@@ -25,17 +25,17 @@ MindKeeper is an AI system designed to solve the critical alignment conflict in 
 ---
 
 ## 📂 Repository Structure
-Our repository is organized as follows to ensure reproducibility and out-of-the-box local execution:
+Our repository is organized as follows to ensure reproducibility in multiple environments:
 
     ├── src/ 
-    │   └── MindKeeper_main.ipynb    # Main runnable notebook (Terminal UI, RAG, Eval)
+    │   ├── MindKeeper_main(locally).ipynb       # Main runnable notebook for local environments
+    │   └── MindKeeper_main(google_drive).ipynb  # Main runnable notebook for Google Colab
     ├── fine_tuning/                 # Notebooks and scripts used for LoRA SFT
     ├── data/
     │   ├── medical_corpus.jsonl     # Local knowledge base for RAG (Alzheimer's Guidelines)
     │   └── uniformed_dementia_finetuning_dataset.jsonl # Distilled dataset for evaluation
     ├── lora_weights/                # Fine-tuned QLoRA model adapter files (Included)
     ├── assets/                      # UI screenshots and evaluation reports
-    ├── app.py                       # Gradio Web UI script
     ├── requirements.txt             # Python dependencies
     └── README.md
 
@@ -55,50 +55,30 @@ You can install all dependencies via pip using the provided requirements file:
 
     pip install -r requirements.txt
 
-*(Note: If you are running this in Google Colab or a fresh Jupyter environment, the first cell of our `MindKeeper_main.ipynb` already includes all the necessary pip install commands).*
+*(Note: If you are running this in Google Colab or a fresh Jupyter environment, the first cell of our notebooks already includes all the necessary pip install commands).*
 
 ---
 
 ## 🚀 How to Run the System
 
-Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box** locally. We also provided a toggle for running via Google Colab.
+Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box**. We have provided two separate notebooks based on your environment.
 
-**Step 1: Set up Hugging Face Token**
-You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb` (or `app.py`), locate the environment variable configuration, and insert your token:
+**Step 1: Choose the Correct Notebook**
+Navigate to the `src/` directory and open the notebook that matches your environment:
+- **For Local Execution:** Open `MindKeeper_main(locally).ipynb`. The relative paths are already pre-configured to locate the weights and data directly.
+- **For Google Colab Execution:** Upload the project folder to your Google Drive, then open `MindKeeper_main(google_drive).ipynb` in Colab. The paths are pre-configured to mount `/content/drive` and locate the files.
+
+**Step 2: Set up Hugging Face Token**
+You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). In the first code cell of your chosen notebook, locate the environment variable configuration and insert your token:
 
     os.environ["HF_TOKEN"] = "your_hf_token_here"
 
-**Step 2: Choose the Run Environment (Local vs Colab)**
-In the first cell of `MindKeeper_main.ipynb`, we provided an environment toggle block.
-- **For Local Execution (Default):** No changes are needed. The relative paths (`../lora_weights`) will work automatically as long as you run the notebook from within the `src/` directory.
-- **For Google Colab Execution:** Comment out the `[LOCAL MODE]` block, uncomment the `[COLAB MODE]` block, and ensure your paths map correctly to your mounted Google Drive folder.
-
 **Step 3: Execute the Pipeline**
-Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
+Simply "Run All" cells in the notebook. The script will automatically:
 1. Initialize the Base Model and load our local QLoRA weights.
 2. Build the FAISS Vector Database for RAG.
 3. Run the **Large-Scale Academic Evaluation Suite** (evaluating cases for safety and empathy).
 4. Run the **Deep Multiturn Memory Stress Test** with terminal UI rendering.
-
----
-
-## 🖥️ Web UI Guide (Gradio)
-
-This project includes a comprehensive Gradio-based Web UI for interacting with the MindKeeper pipeline in a more user-friendly environment. 
-
-**Features Include:**
-- Multi-session chat management.
-- Multimodal Input: Text, PDF upload (with automatic text extraction), and Microphone input (with Whisper transcription).
-- Debug panel for inspecting arbitration logic and pipeline details.
-
-**How to Launch:**
-1. Ensure all dependencies are installed.
-2. Run the application from your terminal:
-   ```bash
-   python app.py
-   ```
-3. Open the local link provided in the terminal (usually `http://127.0.0.1:7860`).
-4. Click **New Chat** to start a session. Extracted PDF text and audio transcription will be inserted into the input box automatically before submission. *(Note: Chat sessions are stored in memory and will reset upon app restart).*
 
 ---
 
