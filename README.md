@@ -7,11 +7,29 @@ MindKeeper is an AI system designed to solve the critical alignment conflict in 
 
 ---
 
+## 🌟 Key Features
+- **Dual-Brain Routing (MoE-Inspired):** Dynamically splits patient interactions into an empathetic response for the patient and a clinical action dashboard for the caregiver.
+- **Validation Therapy Persona:** Fine-tuned on ~1,000 high-quality synthetic clinical records to prioritize emotional validation over confrontational reality-checking (e.g., handling hallucinations safely).
+- **Context Compression Memory:** Mitigates the "catastrophic forgetting" of multi-turn logic common in single-turn SFT models by dynamically compiling recent chat histories into the prompt.
+- **RAG Knowledge Base:** Intercepts factual medical questions and queries a local FAISS vector database built from official Alzheimer's Association guidelines.
+- **Emergency Triage Guardrails:** Hard-coded detection of physical/medical emergencies (e.g., falls) that bypasses the LLM and instantly alerts caregivers.
+
+---
+
+## ⚙️ System Architecture
+
+1. **Triage Engine (The Router):** Analyzes incoming text and classifies it into Medical Emergency, Medication/Dosage Query (routes to RAG), or Daily Chat/Confusion (routes to the Dual-Brain).
+2. **Empathy Engine (Right Brain):** Powered by **Qwen2.5-3B-Instruct** fine-tuned with **QLoRA** (Rank=16). It acts as the patient-facing companion, outputting gentle, empathetic responses strictly adhering to Validation Therapy.
+3. **Logic Engine (Left Brain):** Uses the base Qwen2.5-3B model (with LoRA disabled) to objectively analyze the transcript. It generates a Caregiver Action Dashboard, calculating a Clinical Risk Score (0-10) and providing actionable bullet points.
+
+---
+
 ## 📂 Repository Structure
 Our repository is organized as follows to ensure reproducibility and out-of-the-box local execution:
 
     ├── src/ 
     │   └── MindKeeper_main.ipynb    # Main runnable notebook (UI, RAG, Eval, Memory Test)
+    ├── fine_tuning/                 # Notebooks and scripts used for LoRA SFT
     ├── data/
     │   ├── medical_corpus.jsonl     # Local knowledge base for RAG (Alzheimer's Guidelines)
     │   └── uniformed_dementia_finetuning_dataset.jsonl # Distilled dataset for evaluation
@@ -24,7 +42,7 @@ Our repository is organized as follows to ensure reproducibility and out-of-the-
 
 ## 🛠️ How to Install Dependencies
 
-To run MindKeeper, a GPU-enabled environment is highly recommended (e.g., a local machine with CUDA, or Google Colab with L4/T4 GPU).
+To run MindKeeper, a GPU-enabled environment is highly recommended (e.g., a local machine with CUDA/MPS, or Google Colab with L4/T4 GPU).
 
 **Step 1: Clone the repository**
 
@@ -58,7 +76,7 @@ In the first cell of `MindKeeper_main.ipynb`, we provided an environment toggle 
 Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
 1. Initialize the Base Model and load our local QLoRA weights.
 2. Build the FAISS Vector Database for RAG.
-3. Run the **Large-Scale Academic Evaluation Suite** (evaluating 50 cases for safety and empathy).
+3. Run the **Large-Scale Academic Evaluation Suite** (evaluating cases for safety and empathy).
 4. Run the **Deep Multiturn Memory Stress Test** with terminal UI rendering.
 
 ---
@@ -72,13 +90,29 @@ When the system runs, it dynamically routes the user input and generates a split
 
 **MindKeeper Dual-Brain Output:**
 * **🗣️ PATIENT FACING RESPONSE (Empathy Engine):** *"I see those little green men dancing right now, and they are making fun of everyone! Let's turn the TV off so they can't bother us anymore."* (Applies Validation Therapy instead of correcting the patient's reality).
-* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** * 🧠 **Triage Level:** `🟡 BEHAVIORAL ESCALATION`
+* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** 
+  * 🧠 **Triage Level:** `🟡 BEHAVIORAL ESCALATION`
   * 🔎 **Signs:** `Hallucination, Delusion`
-  * 👨‍⚕️ **Actions:** `"Monitor the patient’s environment for potential triggers of hallucinations and ensure safety..."`
+  * 👨⚕️ **Actions:** `"Monitor the patient’s environment for potential triggers of hallucinations and ensure safety..."`
 
 ![Memory Test Screenshot](./assets/memory_test.jpg)
 
 ### Quantitative Evaluation
-The system also outputs an automated academic evaluation report. In our 50-sample stress test, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a **0.89+ BERTScore F1** for empathy semantic alignment.
+The system also outputs an automated academic evaluation report. In our stress tests, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a high **BERTScore F1** for empathy semantic alignment.
 
 ![Evaluation Report Screenshot](./assets/eval_report.jpg)
+
+---
+
+## 👥 Contributors
+- **Hanzhen Du** (hd2592@columbia.edu)
+- **Hailin He** (hh3185@columbia.edu)
+- **Yiwen Chen** (yc4653@columbia.edu)
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+- Hugging Face (`transformers`, `peft`, `trl`)
+- LangChain & FAISS for RAG implementation
+- Alibaba Cloud for the `Qwen2.5-3B-Instruct` base model.
