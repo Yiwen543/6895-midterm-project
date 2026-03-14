@@ -95,7 +95,7 @@ When the system runs, it dynamically routes the user input and generates a split
   * 🔎 **Signs:** `Hallucination, Delusion`
   * 👨⚕️ **Actions:** `"Monitor the patient’s environment for potential triggers of hallucinations and ensure safety..."`
 
-![Memory Test Screenshot](./assets/memory_test.jpg)
+![Memory Test Screenshot](./assets/memor)
 
 ### Quantitative Evaluation
 The system also outputs an automated academic evaluation report. In our stress tests, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a high **BERTScore F1** for empathy semantic alignment.
