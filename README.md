@@ -20,7 +20,7 @@ MindKeeper is an AI system designed to solve the critical alignment conflict in 
 
 1. **Triage Engine (The Router):** Analyzes incoming text and classifies it into Medical Emergency, Medication/Dosage Query (routes to RAG), or Daily Chat/Confusion (routes to the Dual-Brain).
 2. **Empathy Engine (Right Brain):** Powered by **Qwen2.5-3B-Instruct** fine-tuned with **QLoRA** (Rank=16). It acts as the patient-facing companion, outputting gentle, empathetic responses strictly adhering to Validation Therapy.
-3. **Logic Engine (Left Brain):** Uses the base Qwen2.5-3B model (with LoRA disabled) to objectively analyze the transcript. It generates a Caregiver Action Dashboard, calculating a Clinical Risk Score (0-10) and providing actionable bullet points.
+3. **Logic Engine (Left Brain):** Uses the base Qwen2.5-3B model (with LoRA disabled) to objectively analyze the transcript. It generates a Caregiver Action Dashboard, utilizing a three-tier **Clinical Triage Protocol** (`ROUTINE`, `BEHAVIORAL ESCALATION`, `MEDICAL EMERGENCY`) and providing actionable bullet points.
 
 ---
 
@@ -28,13 +28,14 @@ MindKeeper is an AI system designed to solve the critical alignment conflict in 
 Our repository is organized as follows to ensure reproducibility and out-of-the-box local execution:
 
     ├── src/ 
-    │   └── MindKeeper_main.ipynb    # Main runnable notebook (UI, RAG, Eval, Memory Test)
+    │   └── MindKeeper_main.ipynb    # Main runnable notebook (Terminal UI, RAG, Eval)
     ├── fine_tuning/                 # Notebooks and scripts used for LoRA SFT
     ├── data/
     │   ├── medical_corpus.jsonl     # Local knowledge base for RAG (Alzheimer's Guidelines)
     │   └── uniformed_dementia_finetuning_dataset.jsonl # Distilled dataset for evaluation
     ├── lora_weights/                # Fine-tuned QLoRA model adapter files (Included)
     ├── assets/                      # UI screenshots and evaluation reports
+    ├── app.py                       # Gradio Web UI script
     ├── requirements.txt             # Python dependencies
     └── README.md
 
@@ -63,7 +64,7 @@ You can install all dependencies via pip using the provided requirements file:
 Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box** locally. We also provided a toggle for running via Google Colab.
 
 **Step 1: Set up Hugging Face Token**
-You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb`, locate the environment variable configuration in the first cell, and insert your token:
+You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb` (or `app.py`), locate the environment variable configuration, and insert your token:
 
     os.environ["HF_TOKEN"] = "your_hf_token_here"
 
@@ -81,6 +82,26 @@ Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will 
 
 ---
 
+## 🖥️ Web UI Guide (Gradio)
+
+This project includes a comprehensive Gradio-based Web UI for interacting with the MindKeeper pipeline in a more user-friendly environment. 
+
+**Features Include:**
+- Multi-session chat management.
+- Multimodal Input: Text, PDF upload (with automatic text extraction), and Microphone input (with Whisper transcription).
+- Debug panel for inspecting arbitration logic and pipeline details.
+
+**How to Launch:**
+1. Ensure all dependencies are installed.
+2. Run the application from your terminal:
+   ```bash
+   python app.py
+   ```
+3. Open the local link provided in the terminal (usually `http://127.0.0.1:7860`).
+4. Click **New Chat** to start a session. Extracted PDF text and audio transcription will be inserted into the input box automatically before submission. *(Note: Chat sessions are stored in memory and will reset upon app restart).*
+
+---
+
 ## 💡 Example Usage
 
 When the system runs, it dynamically routes the user input and generates a split-screen response. Below is an example from our Multiturn Memory Stress Test demonstrating handling of hallucinations and memory recall:
@@ -90,8 +111,7 @@ When the system runs, it dynamically routes the user input and generates a split
 
 **MindKeeper Dual-Brain Output:**
 * **🗣️ PATIENT FACING RESPONSE (Empathy Engine):** *"I see those little green men dancing right now, and they are making fun of everyone! Let's turn the TV off so they can't bother us anymore."* (Applies Validation Therapy instead of correcting the patient's reality).
-* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** 
-  * 🧠 **Triage Level:** `🟡 BEHAVIORAL ESCALATION`
+* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** * 🧠 **Triage Level:** `🟡 BEHAVIORAL ESCALATION`
   * 🔎 **Signs:** `Hallucination, Delusion`
   * 👨⚕️ **Actions:** `"Monitor the patient’s environment for potential triggers of hallucinations and ensure safety..."`
 
@@ -101,7 +121,6 @@ When the system runs, it dynamically routes the user input and generates a split
 The system also outputs an automated academic evaluation report. In our stress tests, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a high **BERTScore F1** for empathy semantic alignment.
 
 ![Evaluation Report Screenshot](./assets/eval_report.jpg)
-<<<<<<< HEAD
 
 ---
 
@@ -117,8 +136,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Hugging Face (`transformers`, `peft`, `trl`)
 - LangChain & FAISS for RAG implementation
 - Alibaba Cloud for the `Qwen2.5-3B-Instruct` base model.
-=======
-## UI Guide
-
-This project includes a Gradio-based UI for interacting with the MindKeeper pipeline. The interface supports multi-session chat management, text input, PDF upload with automatic text extraction, microphone input with Whisper transcription, and a debug panel for inspecting arbitration and pipeline details. To launch the UI, run `python app.py`, then open the local Gradio link shown in the terminal, usually `http://127.0.0.1:7860`. To use the interface, click **New Chat** to start a new session, type your message in the input box, optionally upload a PDF or record audio, and then click **Send** to run the pipeline and generate a response. Extracted PDF text and audio transcription will be inserted into the input box automatically before submission. The left sidebar allows you to create, switch, and delete chat sessions, while the **Debug** panel can be expanded to inspect the selected model, arbitration result, pipeline output, and error traceback if a failure occurs. Note that chat sessions are stored in memory only and will be lost after restarting the app. If `run_agent_arbitration(...)` is not available, the UI will automatically use a fallback response handler.
->>>>>>> 79794ca349b142bcfb4c22de8691b4f7297f56d9
