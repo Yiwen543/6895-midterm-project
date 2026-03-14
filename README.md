@@ -42,19 +42,17 @@ You can install all dependencies via pip using the provided requirements file:
 
 ## 🚀 How to Run the System
 
-Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box** locally without requiring Google Drive mounting.
+Because we have included the fine-tuned LoRA weights directly in this repository, the project is configured to run **out-of-the-box** locally. We also provided a toggle for running via Google Colab.
 
 **Step 1: Set up Hugging Face Token**
 You need a valid Hugging Face token to download the base model (`Qwen/Qwen2.5-3B-Instruct`). Open `src/MindKeeper_main.ipynb`, locate the environment variable configuration in the first cell, and insert your token:
 
     os.environ["HF_TOKEN"] = "your_hf_token_here"
 
-**Step 2: Verify Relative File Paths**
-The paths to the dataset, RAG corpus, and LoRA weights are already configured using relative paths. As long as you run the notebook from within the `src/` directory, no changes are needed:
-
-    adapter_path = "../lora_weights" 
-    CORPUS_PATH = "../data/medical_corpus.jsonl" 
-    EVAL_DATASET_PATH = "../data/uniformed_dementia_finetuning_dataset.jsonl"
+**Step 2: Choose the Run Environment (Local vs Colab)**
+In the first cell of `MindKeeper_main.ipynb`, we provided an environment toggle block.
+- **For Local Execution (Default):** No changes are needed. The relative paths (`../lora_weights`) will work automatically as long as you run the notebook from within the `src/` directory.
+- **For Google Colab Execution:** Comment out the `[LOCAL MODE]` block, uncomment the `[COLAB MODE]` block, and ensure your paths map correctly to your mounted Google Drive folder.
 
 **Step 3: Execute the Pipeline**
 Simply "Run All" cells in the `MindKeeper_main.ipynb` notebook. The script will automatically:
@@ -74,13 +72,13 @@ When the system runs, it dynamically routes the user input and generates a split
 
 **MindKeeper Dual-Brain Output:**
 * **🗣️ PATIENT FACING RESPONSE (Empathy Engine):** *"I see those little green men dancing right now, and they are making fun of everyone! Let's turn the TV off so they can't bother us anymore."* (Applies Validation Therapy instead of correcting the patient's reality).
-* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** * 🧠 **Risk Score:** `7/10 (🔴 HIGH RISK)`
+* **📱 CAREGIVER ACTION DASHBOARD (Logic Engine):** * 🧠 **Triage Level:** `🟡 BEHAVIORAL ESCALATION`
   * 🔎 **Signs:** `Hallucination, Delusion`
   * 👨‍⚕️ **Actions:** `"Monitor the patient’s environment for potential triggers of hallucinations and ensure safety..."`
 
 ![Memory Test Screenshot](./assets/memory_test.jpg)
 
 ### Quantitative Evaluation
-The system also outputs an automated academic evaluation report. In our 50-sample stress test, MindKeeper achieved a **100% Clinical Emergency Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a **0.89+ BERTScore F1** for empathy semantic alignment.
+The system also outputs an automated academic evaluation report. In our 50-sample stress test, MindKeeper achieved a **100% Clinical Triage Interception Rate**, a **100% Caregiver Action Compliance Rate**, and a **0.89+ BERTScore F1** for empathy semantic alignment.
 
 ![Evaluation Report Screenshot](./assets/eval_report.jpg)
